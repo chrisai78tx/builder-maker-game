@@ -4,8 +4,10 @@ A kid-friendly browser game creator with two separate editors.
 
 Features:
 - A 3D world builder for simulator, obby, and role-playing games
+- Eight item categories with 57 buildable 3D objects and variants
+- Multiple starter maps for simulator, obby, and role-playing modes
 - Drag, rotate, scale, copy, and delete 3D models
-- 3D play testing with coin collection and local two-player controls
+- Full-screen 3D play testing with two players, collectibles, lava deaths, and spawn restarts
 - A separate card-game maker for designing decks and testing battles
 - Username and 3D builder-color creator
 - Browser-local saving
