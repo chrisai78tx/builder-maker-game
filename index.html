@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6746e8">
+<title>Builder Maker</title>
+<style>
+:root{--purple:#6847e8;--dark:#232944;--line:#d9dded;--yellow:#ffd84d;--green:#27ce92}*{box-sizing:border-box}body{margin:0;height:100vh;overflow:hidden;font-family:Arial Rounded MT Bold,system-ui,sans-serif;color:var(--dark);background:#d9eeff}button,input,select{font:inherit}button{cursor:pointer;border:0;font-weight:800}.hidden{display:none!important}
+header{height:62px;background:linear-gradient(110deg,#5834d4,#8d6aff);color:white;display:flex;align-items:center;gap:8px;padding:8px 12px;box-shadow:0 3px 14px #33218a55;position:relative;z-index:20}.logo{font-size:20px;font-weight:1000;white-space:nowrap}.logo b{background:var(--yellow);color:#3f2a9c;padding:7px;border-radius:11px;margin-right:6px}.space{flex:1}.top{padding:9px 11px;border-radius:11px;background:#ffffff22;color:#fff;border:1px solid #ffffff44}.play{background:var(--green);color:#063d2b}.stop{background:#ffd349;color:#3d3000}.profile{display:flex;gap:5px;align-items:center}
+.app{height:calc(100vh - 62px);display:grid;grid-template-columns:225px 1fr 180px}.side,.inspect{background:white;overflow:auto;padding:12px;z-index:9}.side{border-right:2px solid var(--line)}.inspect{border-left:2px solid var(--line)}h2{font-size:16px;margin:2px 0 10px}h3{font-size:14px}.mode{width:100%;padding:9px;border:2px solid var(--line);border-radius:10px;margin-bottom:10px;font-weight:800}.palette{display:grid;grid-template-columns:1fr 1fr;gap:7px}.item{min-height:67px;border:2px solid #dfd7ff;background:#f4f1ff;border-radius:12px;color:#3f2e96}.item:hover{transform:translateY(-2px)}.item i{font-style:normal;display:block;font-size:26px}.item small{font-size:11px}.side-actions{display:grid;gap:7px;margin-top:10px}.side-actions button{padding:9px;border-radius:10px;background:#ece8ff;color:#4935ae}.side-actions .main{background:var(--purple);color:#fff}
+.world{position:relative;overflow:hidden;touch-action:none;background-color:#d8f1ff;background-image:linear-gradient(#fff7 2px,transparent 2px),linear-gradient(90deg,#fff7 2px,transparent 2px);background-size:40px 40px}.ground{position:absolute;left:0;right:0;bottom:0;height:20%;background:#a9de78;border-top:5px solid #83c45d;pointer-events:none}.sun{position:absolute;right:6%;top:6%;font-size:50px;pointer-events:none}.tip{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);width:310px;max-width:75%;text-align:center;background:#fffde8dd;border:3px dashed #7155d6;border-radius:18px;padding:16px;color:#4c3990;font-weight:800;pointer-events:none}
+.obj{position:absolute;width:76px;height:76px;display:flex;align-items:center;justify-content:center;font-size:46px;user-select:none;touch-action:none;cursor:grab;filter:drop-shadow(0 4px 3px #2345);transform-origin:center}.obj.selected{outline:4px solid var(--yellow);outline-offset:4px;border-radius:10px}.obj em{position:absolute;top:100%;font-style:normal;font-size:10px;color:#fff;background:#27304a;padding:3px 5px;border-radius:6px;white-space:nowrap}.obj.platform{width:125px;height:34px;background:#925b34;border:5px solid #63381f;border-radius:7px;font-size:0}.obj.lava{width:125px;height:42px;background:repeating-linear-gradient(45deg,#ff4136 0 14px,#ff9b22 14px 28px);border-radius:11px;font-size:0}.obj.road{width:135px;height:52px;background:#596273;border:4px solid #343a47;border-radius:7px;font-size:0}.obj.road:after{content:"";position:absolute;width:100%;border-top:4px dashed white}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:7px}.tool{padding:9px 3px;border-radius:9px;background:#efecff;color:#4a36b2;font-size:11px}.danger{background:#ffe7ed;color:#bd254d}.info{font-size:12px;color:#72798c;line-height:1.4}.stat{display:flex;justify-content:space-between;font-size:12px;margin:7px 0}.value{padding:8px;background:#f3f4f9;border-radius:9px;margin-bottom:9px;font-size:12px}
+.toast{position:absolute;left:50%;bottom:18px;transform:translate(-50%,15px);opacity:0;background:#232944;color:#fff;padding:10px 14px;border-radius:12px;font-weight:800;z-index:30;transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}.score{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:#fff;border:3px solid var(--purple);border-radius:13px;padding:7px 12px;font-weight:900;z-index:13}.avatar{position:absolute;width:56px;height:65px;border:4px solid #3b3176;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:37px;z-index:12;filter:drop-shadow(0 4px 3px #2345)}.avatar.p2{border-color:#df416c}.avatar:after{content:attr(data-name);position:absolute;top:-23px;font-size:10px;background:#30285f;color:#fff;padding:3px 5px;border-radius:6px}.pad{position:absolute;right:10px;bottom:10px;display:grid;grid-template-columns:45px 45px 45px;grid-template-areas:". u ." "l d r";gap:6px;z-index:15}.pad button{width:45px;height:40px;border-radius:11px;background:#fff;color:#4b35b6;font-size:18px;box-shadow:0 2px 8px #3345}.u{grid-area:u}.l{grid-area:l}.d{grid-area:d}.r{grid-area:r}
+.shade{position:fixed;inset:0;background:#1c173aaa;display:flex;align-items:center;justify-content:center;padding:18px;z-index:100}.modal{background:#fff;border-radius:20px;width:min(510px,100%);max-height:90vh;overflow:auto;padding:22px;box-shadow:0 20px 70px #120b3baa}.modal h2{font-size:23px}.field{display:grid;gap:5px;margin:12px 0}.field input,.field select{padding:11px;border:2px solid var(--line);border-radius:10px}.avatars{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}.avpick{font-size:27px;padding:7px;border-radius:10px;background:#f0edff}.avpick.on{outline:4px solid var(--yellow)}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:15px}.actions button{padding:10px 14px;border-radius:10px;background:#ece9f8;color:#4836a4}.actions .primary{background:var(--purple);color:#fff}.templates{display:grid;grid-template-columns:1fr 1fr;gap:9px}.template{padding:14px 6px;border-radius:12px;background:#efecff;color:#4834a9}.template span{font-size:27px;display:block}.card{width:180px;margin:10px auto;padding:10px;border:5px solid #563ac2;border-radius:16px;background:linear-gradient(#fff,#ece8ff);text-align:center}.card .art{font-size:50px}.card .stats{display:flex;justify-content:space-around;font-weight:900}
+@media(max-width:760px){header{height:56px;padding:6px}.logo{font-size:14px}.logo b{padding:5px}.top{font-size:11px;padding:7px}.profile span:last-child{display:none}.app{height:calc(100vh - 56px);grid-template-columns:100px 1fr}.side{padding:6px}.inspect{display:none}.palette{grid-template-columns:1fr;gap:4px}.item{min-height:47px}.item i{display:inline;font-size:20px}.item small{font-size:9px}.mode{font-size:9px;padding:6px}.side-actions button{font-size:9px;padding:7px}.obj{width:60px;height:60px;font-size:37px}.obj.platform,.obj.lava,.obj.road{width:88px}.avatars{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><b>BM</b>Builder Maker</div>
+  <button class="top" id="newBtn">New</button><button class="top" id="saveBtn">Save</button><button class="top" id="friendsBtn">Friends</button>
+  <div class="space"></div>
+  <button class="top play" id="playBtn">▶ Play</button><button class="top stop hidden" id="stopBtn">■ Stop</button>
+  <button class="top profile" id="profileBtn"><span id="miniAvatar">🧑‍🚀</span><span id="profileName">Player</span></button>
+</header>
+<main class="app">
+  <aside class="side" id="side"><h2>🧰 ITEMS</h2>
+    <select class="mode" id="mode"><option value="all">All Items</option><option value="sim">Simulator</option><option value="obby">Obby</option><option value="card">Card Game</option><option value="role">Role-Playing</option></select>
+    <div class="palette" id="palette"></div>
+    <div class="side-actions"><button class="main" id="quickBtn">⚡ Quick Start</button><button id="cardBtn">🃏 Make a Card</button></div>
+  </aside>
+  <section class="world" id="world">
+    <div class="sun">☀️</div><div class="ground"></div><div class="tip" id="tip">Choose an item on the left. Drag it, rotate it, scale it, and press Play!</div>
+    <div class="score hidden" id="scoreBox">⭐ Coins: <span id="score">0</span></div>
+    <div class="pad hidden" id="pad"><button class="u" data-dir="u">▲</button><button class="l" data-dir="l">◀</button><button class="d" data-dir="d">▼</button><button class="r" data-dir="r">▶</button></div>
+    <div class="toast" id="toast"></div>
+  </section>
+  <aside class="inspect"><h2>🛠️ OBJECT TOOLS</h2>
+    <p class="info" id="nothing">Click an object in your world to edit it.</p>
+    <div id="editing" class="hidden"><div class="value"><b id="selectedName">Object</b><br><span id="selectedSize">Size 100%</span></div>
+      <div class="tools"><button class="tool" data-act="left">↶ Rotate</button><button class="tool" data-act="right">↷ Rotate</button><button class="tool" data-act="small">− Smaller</button><button class="tool" data-act="big">＋ Bigger</button><button class="tool" data-act="copy">⧉ Copy</button><button class="tool danger" data-act="delete">✕ Delete</button></div>
+    </div>
+    <hr style="border:0;border-top:2px solid var(--line);margin:16px 0"><h3>WORLD INFO</h3>
+    <div class="stat"><span>Objects</span><b id="count">0</b></div><div class="stat"><span>Status</span><b id="status">Building</b></div>
+    <p class="info">Play: Player 1 uses WASD. Player 2 uses the arrow keys.</p>
+  </aside>
+</main>
+
+<div class="shade" id="profileModal"><div class="modal"><h2>👋 Create Your Builder</h2><p>Choose a username and avatar.</p>
+  <div class="field"><label><b>Username</b></label><input id="username" maxlength="16" placeholder="SuperBuilder"></div>
+  <div class="field"><label><b>Avatar</b></label><div class="avatars" id="avatars"></div></div>
+  <div class="actions"><button class="primary" id="startBtn">Start Building!</button></div>
+</div></div>
+
+<div class="shade hidden" id="quickModal"><div class="modal"><h2>⚡ Quick Start</h2><p>Choose a starter world.</p><div class="templates">
+  <button class="template" data-template="sim"><span>🪙</span>Simulator</button><button class="template" data-template="obby"><span>🏁</span>Obby</button>
+  <button class="template" data-template="card"><span>🃏</span>Card Arena</button><button class="template" data-template="role"><span>🏘️</span>Role-Play Town</button>
+  </div><div class="actions"><button data-close="quickModal">Cancel</button></div></div></div>
+
+<div class="shade hidden" id="cardModal"><div class="modal"><h2>🃏 Card Maker</h2>
+  <div class="field"><label><b>Card name</b></label><input id="cardName" value="Builder Bot" maxlength="18"></div>
+  <div class="field"><label><b>Picture</b></label><select id="cardArt"><option>🤖</option><option>🐉</option><option>🦸</option><option>🏰</option><option>🧙</option></select></div>
+  <div class="field"><label><b>Attack: <span id="attackValue">5</span></b></label><input id="attack" type="range" min="1" max="10" value="5"></div>
+  <div class="field"><label><b>Health: <span id="healthValue">8</span></b></label><input id="health" type="range" min="1" max="10" value="8"></div>
+  <div class="card"><div class="art" id="previewArt">🤖</div><b id="previewName">Builder Bot</b><div class="stats"><span>⚔️ <i id="previewAttack">5</i></span><span>❤️ <i id="previewHealth">8</i></span></div></div>
+  <div class="actions"><button data-close="cardModal">Cancel</button><button class="primary" id="makeCard">Create Card</button></div>
+</div></div>
+
+<div class="shade hidden" id="friendsModal"><div class="modal"><h2>👫 Play With Friends</h2>
+  <p><b>Two players can play together on this device.</b></p><p>Player 1 uses W A S D. Player 2 uses the arrow keys.</p>
+  <div class="field"><label><b>Friend's username</b></label><input id="friendName" maxlength="16" placeholder="Friend"></div>
+  <p class="info">You can also send this page link to a friend so they can make their own world. Live online building can be added in a future version.</p>
+  <div class="actions"><button data-close="friendsModal">Cancel</button><button class="primary" id="addFriend">Add Player 2</button></div>
+</div></div>
+
+<script>
+(function(){
+var q=function(s){return document.querySelector(s)},qa=function(s){return Array.from(document.querySelectorAll(s))};
+var world=q('#world'),palette=q('#palette'),toastBox=q('#toast');
+var catalog=[
+{id:'house',name:'House',icon:'🏠',m:'role all'},{id:'shop',name:'Shop',icon:'🏪',m:'role sim all'},{id:'school',name:'School',icon:'🏫',m:'role all'},{id:'castle',name:'Castle',icon:'🏰',m:'role all'},{id:'tree',name:'Tree',icon:'🌳',m:'role all'},{id:'road',name:'Road',icon:'▬',m:'role all'},
+{id:'coin',name:'Coin',icon:'🪙',m:'sim all'},{id:'chest',name:'Chest',icon:'🎁',m:'sim all'},{id:'pet',name:'Pet',icon:'🐶',m:'sim role all'},
+{id:'platform',name:'Platform',icon:'▬',m:'obby all'},{id:'lava',name:'Lava',icon:'≈',m:'obby all'},{id:'checkpoint',name:'Checkpoint',icon:'🚩',m:'obby all'},
+{id:'spawn',name:'Spawn',icon:'⭐',m:'sim obby card role all'},{id:'npc',name:'Character',icon:'🧑‍🌾',m:'sim role all'},{id:'cards',name:'Card Table',icon:'🃏',m:'card all'}
+];
+var state={objects:[],selected:null,playing:false,profile:{name:'Player',avatar:'🧑‍🚀'},friend:'',score:0},drag=null,timer;
+function note(t){toastBox.textContent=t;toastBox.classList.add('show');clearTimeout(timer);timer=setTimeout(function(){toastBox.classList.remove('show')},1700)}
+function getMeta(type){return catalog.find(function(i){return i.id===type})||{name:'Custom Card',icon:'🃏'}}
+function uid(){return'o'+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+function drawPalette(mode){palette.innerHTML='';catalog.filter(function(i){return mode==='all'||i.m.indexOf(mode)>=0}).forEach(function(i){var b=document.createElement('button');b.className='item';b.innerHTML='<i>'+i.icon+'</i><small>'+i.name+'</small>';b.onclick=function(){add(i.id)};palette.appendChild(b)})}
+function add(type,x,y,extra){var r=world.getBoundingClientRect(),o=Object.assign({id:uid(),type:type,x:x==null?Math.max(8,r.width/2-35+Math.random()*45):x,y:y==null?Math.max(8,r.height/2-35+Math.random()*45):y,rot:0,scale:1},extra||{});state.objects.push(o);drawObject(o);select(o.id);update();q('#tip').classList.add('hidden');note(getMeta(type).name+' added!');return o}
+function transform(el,o){el.style.left=o.x+'px';el.style.top=o.y+'px';el.style.transform='rotate('+o.rot+'deg) scale('+o.scale+')'}
+function drawObject(o){var old=q('[data-id="'+o.id+'"]');if(old)old.remove();var m=getMeta(o.type),el=document.createElement('div');el.className='obj '+o.type+(state.selected===o.id?' selected':'');el.dataset.id=o.id;el.innerHTML='<span>'+(o.icon||m.icon)+'</span><em>'+(o.label||m.name)+'</em>';transform(el,o);el.addEventListener('pointerdown',function(e){startDrag(e,o.id)});world.appendChild(el)}
+function startDrag(e,id){if(state.playing)return;e.preventDefault();select(id);var o=state.objects.find(function(a){return a.id===id}),r=world.getBoundingClientRect();drag={id:id,dx:e.clientX-r.left-o.x,dy:e.clientY-r.top-o.y};if(e.currentTarget.setPointerCapture)e.currentTarget.setPointerCapture(e.pointerId)}
+window.addEventListener('pointermove',function(e){if(!drag)return;var o=state.objects.find(function(a){return a.id===drag.id}),r=world.getBoundingClientRect();o.x=Math.max(0,Math.min(r.width-35,e.clientX-r.left-drag.dx));o.y=Math.max(0,Math.min(r.height-35,e.clientY-r.top-drag.dy));transform(q('[data-id="'+o.id+'"]'),o)});
+window.addEventListener('pointerup',function(){drag=null});
+function select(id){state.selected=id;qa('.obj').forEach(function(el){el.classList.toggle('selected',el.dataset.id===id)});var o=state.objects.find(function(a){return a.id===id});q('#nothing').classList.toggle('hidden',!!o);q('#editing').classList.toggle('hidden',!o);if(o){q('#selectedName').textContent=o.label||getMeta(o.type).name;q('#selectedSize').textContent='Size '+Math.round(o.scale*100)+'%'}}
+function edit(action){var o=state.objects.find(function(a){return a.id===state.selected});if(!o)return;if(action==='left')o.rot-=15;if(action==='right')o.rot+=15;if(action==='small')o.scale=Math.max(.45,o.scale-.15);if(action==='big')o.scale=Math.min(2.2,o.scale+.15);if(action==='copy'){add(o.type,o.x+22,o.y+22,{rot:o.rot,scale:o.scale,label:o.label,icon:o.icon});return}if(action==='delete'){state.objects=state.objects.filter(function(a){return a.id!==o.id});q('[data-id="'+o.id+'"]').remove();select(null);update();if(!state.objects.length)q('#tip').classList.remove('hidden');return}drawObject(o);select(o.id)}
+function update(){q('#count').textContent=state.objects.length}
+function save(){localStorage.setItem('bmWorld',JSON.stringify(state.objects));localStorage.setItem('bmProfile',JSON.stringify(state.profile));note('World saved! 💾')}
+function load(){try{state.objects=JSON.parse(localStorage.getItem('bmWorld'))||[];state.profile=JSON.parse(localStorage.getItem('bmProfile'))||state.profile}catch(e){}state.objects.forEach(drawObject);if(state.objects.length)q('#tip').classList.add('hidden');profileUI();update()}
+function fresh(){if(state.objects.length&&!confirm('Start a new empty world?'))return;state.objects=[];qa('.obj,.avatar').forEach(function(e){e.remove()});select(null);update();q('#tip').classList.remove('hidden');note('New world ready!')}
+function modal(id,on){q('#'+id).classList.toggle('hidden',!on)}
+function template(kind){var sets={sim:[['spawn',30,260],['shop',210,230],['coin',155,160],['coin',330,180],['coin',470,255],['chest',590,220]],obby:[['spawn',25,300],['platform',130,310],['lava',270,340],['platform',405,270],['checkpoint',570,210]],card:[['spawn',40,300],['cards',230,230],['cards',440,230],['castle',620,160]],role:[['spawn',25,310],['road',145,335],['house',275,210],['shop',420,220],['school',570,180],['tree',710,250]]};(sets[kind]||[]).forEach(function(v){add(v[0],v[1],v[2])});modal('quickModal',false);note('Starter world added!')}
+function makeAvatar(n){var old=q('#p'+n);if(old)old.remove();var a=document.createElement('div');a.id='p'+n;a.className='avatar'+(n===2?' p2':'');a.textContent=n===2?'🦸':state.profile.avatar;a.dataset.name=n===2?(state.friend||'Friend'):state.profile.name;var s=state.objects.find(function(o){return o.type==='spawn'});a.style.left=((s&&s.x)||20)+(n===2?55:0)+'px';a.style.top=((s&&s.y)||250)+'px';world.appendChild(a)}
+function play(){if(state.playing)return;state.playing=true;select(null);q('#side').style.pointerEvents='none';q('#side').style.opacity='.5';q('#playBtn').classList.add('hidden');q('#stopBtn').classList.remove('hidden');q('#scoreBox').classList.remove('hidden');q('#pad').classList.remove('hidden');q('#status').textContent='Playing';state.score=0;q('#score').textContent=0;state.objects.forEach(function(o){o.collected=false;var e=q('[data-id="'+o.id+'"]');if(e)e.style.visibility=''});makeAvatar(1);if(state.friend)makeAvatar(2);note('Play test started!')}
+function stop(){state.playing=false;qa('.avatar').forEach(function(e){e.remove()});q('#side').style.pointerEvents='';q('#side').style.opacity='';q('#playBtn').classList.remove('hidden');q('#stopBtn').classList.add('hidden');q('#scoreBox').classList.add('hidden');q('#pad').classList.add('hidden');q('#status').textContent='Building';state.objects.forEach(function(o){var e=q('[data-id="'+o.id+'"]');if(e)e.style.visibility=''});note('Back to building!')}
+function move(n,dx,dy){if(!state.playing)return;var a=q('#p'+n);if(!a)return;var x=Math.max(0,Math.min(world.clientWidth-a.offsetWidth,(parseFloat(a.style.left)||0)+dx)),y=Math.max(0,Math.min(world.clientHeight-a.offsetHeight,(parseFloat(a.style.top)||0)+dy));a.style.left=x+'px';a.style.top=y+'px';if(n===1)collect(a)}
+function collect(a){var ar=a.getBoundingClientRect();state.objects.filter(function(o){return o.type==='coin'&&!o.collected}).forEach(function(o){var e=q('[data-id="'+o.id+'"]'),r=e&&e.getBoundingClientRect();if(r&&ar.left<r.right&&ar.right>r.left&&ar.top<r.bottom&&ar.bottom>r.top){o.collected=true;e.style.visibility='hidden';state.score++;q('#score').textContent=state.score;note('Coin collected! ⭐')}})}
+function profileUI(){q('#profileName').textContent=state.profile.name;q('#miniAvatar').textContent=state.profile.avatar}
+drawPalette('all');['🧑‍🚀','🦸','🧙','🥷','👩‍🔧','🧑‍🎨','👩‍🔬','🧑‍🚒','🤠','🧚','🤖','👽'].forEach(function(a,i){var b=document.createElement('button');b.className='avpick'+(i===0?' on':'');b.textContent=a;b.onclick=function(){qa('.avpick').forEach(function(x){x.classList.remove('on')});b.classList.add('on')};q('#avatars').appendChild(b)});load();if(localStorage.getItem('bmProfile'))modal('profileModal',false);
+q('#mode').onchange=function(e){drawPalette(e.target.value)};q('#saveBtn').onclick=save;q('#newBtn').onclick=fresh;q('#playBtn').onclick=play;q('#stopBtn').onclick=stop;q('#quickBtn').onclick=function(){modal('quickModal',true)};q('#cardBtn').onclick=function(){modal('cardModal',true)};q('#friendsBtn').onclick=function(){modal('friendsModal',true)};q('#profileBtn').onclick=function(){q('#username').value=state.profile.name;modal('profileModal',true)};
+q('#startBtn').onclick=function(){var name=q('#username').value.trim().replace(/[^a-zA-Z0-9 _-]/g,'').slice(0,16)||'SuperBuilder';state.profile={name:name,avatar:(q('.avpick.on')||{}).textContent||'🧑‍🚀'};profileUI();localStorage.setItem('bmProfile',JSON.stringify(state.profile));modal('profileModal',false);note('Welcome, '+name+'!')};
+qa('[data-close]').forEach(function(b){b.onclick=function(){modal(b.dataset.close,false)}});qa('[data-template]').forEach(function(b){b.onclick=function(){template(b.dataset.template)}});qa('.tool').forEach(function(b){b.onclick=function(){edit(b.dataset.act)}});
+['cardName','cardArt','attack','health'].forEach(function(id){q('#'+id).oninput=function(){q('#previewName').textContent=q('#cardName').value||'Untitled';q('#previewArt').textContent=q('#cardArt').value;q('#previewAttack').textContent=q('#attackValue').textContent=q('#attack').value;q('#previewHealth').textContent=q('#healthValue').textContent=q('#health').value}});
+q('#makeCard').onclick=function(){add('custom',null,null,{icon:q('#cardArt').value,label:q('#cardName').value||'Untitled Card',card:{attack:+q('#attack').value,health:+q('#health').value}});modal('cardModal',false);note('Your card was created!')};
+q('#addFriend').onclick=function(){state.friend=q('#friendName').value.trim().slice(0,16)||'Friend';modal('friendsModal',false);note(state.friend+' joined! Press Play.')};
+q('#pad').addEventListener('pointerdown',function(e){var d=e.target.dataset.dir;if(!d)return;move(1,d==='l'?-20:d==='r'?20:0,d==='u'?-20:d==='d'?20:0)});
+window.addEventListener('keydown',function(e){if(['INPUT','SELECT'].indexOf(document.activeElement.tagName)>=0)return;var k=e.key.toLowerCase();if(state.playing){if(k==='w')move(1,0,-18);if(k==='s')move(1,0,18);if(k==='a')move(1,-18,0);if(k==='d')move(1,18,0);if(e.key==='ArrowUp')move(state.friend?2:1,0,-18);if(e.key==='ArrowDown')move(state.friend?2:1,0,18);if(e.key==='ArrowLeft')move(state.friend?2:1,-18,0);if(e.key==='ArrowRight')move(state.friend?2:1,18,0);return}var o=state.objects.find(function(a){return a.id===state.selected});if(!o)return;var moved=true;if(e.key==='ArrowUp')o.y-=5;else if(e.key==='ArrowDown')o.y+=5;else if(e.key==='ArrowLeft')o.x-=5;else if(e.key==='ArrowRight')o.x+=5;else moved=false;if(moved){e.preventDefault();transform(q('[data-id="'+o.id+'"]'),o)}});
+world.addEventListener('pointerdown',function(e){if(e.target===world&&!state.playing)select(null)});
+})();
+</script>
+</body>
+</html>
