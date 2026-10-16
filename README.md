@@ -1,13 +1,13 @@
-# Builder Maker
+# Builder Maker 3D
 
-A kid-friendly browser game-building prototype.
+A kid-friendly browser game creator with two separate editors.
 
 Features:
-- Drag, rotate, scale, copy, and delete world objects
-- Simulator, obby, card-game, and role-playing starter worlds
-- Play testing with coin collection
-- Two-player controls on one device
-- Username and avatar maker
+- A 3D world builder for simulator, obby, and role-playing games
+- Drag, rotate, scale, copy, and delete 3D models
+- 3D play testing with coin collection and local two-player controls
+- A separate card-game maker for designing decks and testing battles
+- Username and 3D builder-color creator
 - Browser-local saving
 
-Open index.html in a modern browser to play.
+Open index.html in a modern WebGL-capable browser to play.
